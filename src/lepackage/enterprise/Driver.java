@@ -3,6 +3,7 @@ package lepackage.enterprise;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 public class Driver {
@@ -28,6 +29,30 @@ public class Driver {
 				input = ScannerSingleton.getInt();
 				switch (input) {
 				case 1:
+					try {
+						statement = connection.prepareStatement("select * from carriarmati");
+						result = statement.executeQuery();
+						ResultSetMetaData meta = result.getMetaData();
+						
+						String data = "";
+						String id = meta.getColumnLabel(1);
+						String nome = meta.getColumnLabel(2);
+						String peso = meta.getColumnLabel(3);
+						System.out.println("-----------------------------------------------");
+						System.out.println("|" + id + "    | " + nome + "                      | " + peso + "  |");
+						System.out.println("-----------------------------------------------");
+						while (result.next()) {
+							for (int j = 1; j <= 3; j++) {
+								data = result.getNString(j);
+								System.out.print("|" + data + "     ");
+							}
+							System.out.print("|\n");
+						}			
+						System.out.println("-----------------------------------------------");
+						
+					} catch (SQLException e) {
+						System.out.println(e.getMessage());
+					}
 					break;
 				case 2:
 					break;
@@ -39,9 +64,9 @@ public class Driver {
 						state = connection
 								.prepareStatement("insert into carriarmati (id, modello, peso)" + " values (?, ?, ?)");
 						if (result.next()) {
-						int idN = Integer.parseInt(result.getString(1)) + 1;
-						String id = String.valueOf(idN);
-						state.setString(1, id);
+							int idN = Integer.parseInt(result.getString(1)) + 1;
+							String id = String.valueOf(idN);
+							state.setString(1, id);
 						} else {
 							state.setString(1, "0");
 						}
@@ -69,12 +94,13 @@ public class Driver {
 						}
 					} catch (SQLException e) {
 
-					};
+					}
+					;
 					break;
 				case 5:
 					try {
 						state = connection.prepareStatement("commit");
-						state.execute(); 
+						state.execute();
 					} catch (SQLException e) {
 						System.out.println(e.getMessage());
 					}
@@ -82,6 +108,7 @@ public class Driver {
 				case 0:
 					try {
 						connection.close();
+						System.out.println("Chiusura in corso...");
 						System.exit(0);
 					} catch (SQLException e) {
 						System.out.println(e.getMessage());
