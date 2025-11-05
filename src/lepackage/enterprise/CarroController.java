@@ -45,5 +45,14 @@ public class CarroController {
 			System.out.println(e.getMessage());
 		}
 		return null;
-	}	
+	}
+	
+	public String search() {
+		try {
+			return view.search();
+		} catch (InputMismatchException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 }

@@ -30,10 +30,10 @@ public class Driver {
 				switch (input) {
 				case 1:
 					try {
-						statement = connection.prepareStatement("select * from carriarmati");
+						statement = connection.prepareStatement("select * from carriarmati order by id");
 						result = statement.executeQuery();
 						ResultSetMetaData meta = result.getMetaData();
-						
+
 						String data = "";
 						String id = meta.getColumnLabel(1);
 						String nome = meta.getColumnLabel(2);
@@ -47,14 +47,39 @@ public class Driver {
 								System.out.print("|" + data + "     ");
 							}
 							System.out.print("|\n");
-						}			
+						}
 						System.out.println("-----------------------------------------------");
-						
+
 					} catch (SQLException e) {
 						System.out.println(e.getMessage());
 					}
 					break;
 				case 2:
+					try {
+						String idCerca = controller.search();
+						statement = connection.prepareStatement("select * from carriarmati where id = ?");
+						statement.setString(1, idCerca);
+						result = statement.executeQuery();
+						ResultSetMetaData meta = result.getMetaData();
+
+						String data = "";
+						String id = meta.getColumnLabel(1);
+						String nome = meta.getColumnLabel(2);
+						String peso = meta.getColumnLabel(3);
+						System.out.println("-----------------------------------------------");
+						System.out.println("|" + id + "    | " + nome + "                      | " + peso + "  |");
+						System.out.println("-----------------------------------------------");
+						while (result.next()) {
+							for (int j = 1; j <= 3; j++) {
+								data = result.getNString(j);
+								System.out.print("|" + data + "     ");
+							}
+							System.out.print("|\n");
+						}
+						System.out.println("-----------------------------------------------");
+					} catch (SQLException e) {
+						System.out.println(e.getMessage());
+					}
 					break;
 				case 3:
 					String[] dati = controller.insertDb();
@@ -94,8 +119,7 @@ public class Driver {
 						}
 					} catch (SQLException e) {
 
-					}
-					;
+					};
 					break;
 				case 5:
 					try {

@@ -18,4 +18,8 @@ public class CarroView {
 	public String delete() throws InputMismatchException {
 		return ScannerSingleton.getString("Inserisci id del carro da eliminare: ");	
 	}
+	
+	public String search() throws InputMismatchException {
+		return ScannerSingleton.getString("Inserisci id del carro da cercare");
+	}
 }
